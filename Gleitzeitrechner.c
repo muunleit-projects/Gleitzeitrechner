@@ -8,7 +8,7 @@
 #define PAUSE_MINUTEN 30        // reguläre Pausenzeit, Minutenanteil
 
 int main() {
-  // notwendige Variablen, nicht verändern
+  // notwendige Variablen, bitte nicht verändern
   unsigned int arbeitsbeginn_stunden = 0;  // Eingestempelt, Stundenanteil
   unsigned int arbeitsbeginn_minuten = 0;  // Eingestempelt, Minutenanteil
   time_t jetzt = 0;                // aktuelle Zeit (Sekunden seit 01.01.1970)
