@@ -15,7 +15,7 @@ int main() {
   struct tm *arbeitsende = NULL;   // Arbeitsende (Konstrukt mit Datum/Uhrzeit)
   float zeit_bis_arbeitsende = 0;  // von "jetzt" bis zum Arbeitsende in Stunden
 
-  // Benutzerreingabe des Einstempelns anfordern
+  // Benutzerreingabe des Einstempelns anfordern test
   printf("Geben Sie die Anfangszeit ein [HH:MM] ");
   scanf("%2u:%2u", &arbeitsbeginn_stunden, &arbeitsbeginn_minuten);
   while (getchar() != '\n')
