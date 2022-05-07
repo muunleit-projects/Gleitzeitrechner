@@ -1,0 +1,11 @@
+int Eingabeuhrzeit ( Stunde_P, Minute_P)
+ 
+int Testuhrzeit ()
+
+Datei lesen
+Datei schreiben
+
+If (func() != 0) return exit failure
+
+If Arbeitszeit > 9 then pause 45
+Else if Arbeitszeit > 6 then pause 30
