@@ -18,12 +18,6 @@ int main() {
   float zeit_bis_arbeitsende = 0;  // von "jetzt" bis zum Arbeitsende in Stunden
 
   // Benutzerreingabe des Einstempelns anfordern test
-  /*
-  printf("Geben Sie die Anfangszeit ein [HH:MM] ");
-  scanf("%2u:%2u", &arbeitsbeginn_stunden, &arbeitsbeginn_minuten);
-  while (getchar() != '\n')
-    ;
-    */
   printf("Geben Sie die Anfangszeit ein ");
   eingabeUhrzeit(&arbeitsbeginn_stunden, &arbeitsbeginn_minuten);
 
@@ -72,12 +66,12 @@ int main() {
 int eingabeUhrzeit(unsigned int* stundenPointer, unsigned int* minutenPointer) {
   unsigned int stundenEingabe = 0;
   unsigned int minutenEingabe = 0;
-  
+
   printf("[HH:MM] ");
   scanf("%2u:%2u", &stundenEingabe, &minutenEingabe);
   while (getchar() != '\n')
     ;
-  
+
   *stundenPointer = stundenEingabe;
   *minutenPointer = minutenEingabe;
   return 0;
