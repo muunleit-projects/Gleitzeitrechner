@@ -7,19 +7,25 @@
 #define PAUSE_STUNDEN 0         // reguläre Pausenzeit, Stundenanteil
 #define PAUSE_MINUTEN 30        // reguläre Pausenzeit, Minutenanteil
 
+int eingabeUhrzeit(unsigned int* stundenPointer, unsigned int* minutenPointer);
+
 int main() {
   // notwendige Variablen, bitte nicht verändern
   unsigned int arbeitsbeginn_stunden = 0;  // Eingestempelt, Stundenanteil
   unsigned int arbeitsbeginn_minuten = 0;  // Eingestempelt, Minutenanteil
   time_t jetzt = 0;                // aktuelle Zeit (Sekunden seit 01.01.1970)
-  struct tm *arbeitsende = NULL;   // Arbeitsende (Konstrukt mit Datum/Uhrzeit)
+  struct tm* arbeitsende = NULL;   // Arbeitsende (Konstrukt mit Datum/Uhrzeit)
   float zeit_bis_arbeitsende = 0;  // von "jetzt" bis zum Arbeitsende in Stunden
 
   // Benutzerreingabe des Einstempelns anfordern test
+  /*
   printf("Geben Sie die Anfangszeit ein [HH:MM] ");
   scanf("%2u:%2u", &arbeitsbeginn_stunden, &arbeitsbeginn_minuten);
   while (getchar() != '\n')
     ;
+    */
+  printf("Geben Sie die Anfangszeit ein ");
+  eingabeUhrzeit(&arbeitsbeginn_stunden, &arbeitsbeginn_minuten);
 
   // Benutzer-Eingabe auf Sinnhaftigkeit überprüfen
   if (arbeitsbeginn_stunden > 23 || arbeitsbeginn_minuten > 59) {
@@ -61,4 +67,18 @@ int main() {
   getchar();
 
   return EXIT_SUCCESS;
+}
+
+int eingabeUhrzeit(unsigned int* stundenPointer, unsigned int* minutenPointer) {
+  unsigned int stundenEingabe = 0;
+  unsigned int minutenEingabe = 0;
+  
+  printf("[HH:MM] ");
+  scanf("%2u:%2u", &stundenEingabe, &minutenEingabe);
+  while (getchar() != '\n')
+    ;
+  
+  *stundenPointer = stundenEingabe;
+  *minutenPointer = minutenEingabe;
+  return 0;
 }
