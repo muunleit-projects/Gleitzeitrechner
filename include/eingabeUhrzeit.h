@@ -8,12 +8,12 @@
  * @return 0 for test on input was okay and 1 for test gone wrong
  */
 
-#ifndef EINGABE_UHRZEIT
-#define EINGABE_UHRZEIT
-
 #include <stdio.h>
 
 #include "testUhrzeit.h"
+
+#ifndef EINGABE_UHRZEIT
+#define EINGABE_UHRZEIT
 
 int eingabeUhrzeit(unsigned int*, unsigned int*);
 

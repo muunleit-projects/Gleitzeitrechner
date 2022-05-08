@@ -8,10 +8,10 @@
  * @return 0 for test okay and 1 for test gone wrong
  */
 
+#include <stdio.h>
+
 #ifndef TEST_UHRZEIT
 #define TEST_UHRZEIT
-
-#include <stdio.h>
 
 int testUhrzeit(unsigned int, unsigned int);
 
