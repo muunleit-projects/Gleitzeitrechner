@@ -30,7 +30,7 @@ int main() {
   arbeitsende = localtime(&jetzt);
 
   // Tageswechsel überprüfen und Tag des Arbeitsbeginns anpassen
-  if (arbeitsende->tm_hour < arbeitsbeginn_stunden) {
+  if (arbeitsende->tm_hour < (int)arbeitsbeginn_stunden) {
     arbeitsende->tm_mday -= 1;
   }
 
