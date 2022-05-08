@@ -51,5 +51,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-#visual studio code
+# Folders
 .vscode/
+.output/
