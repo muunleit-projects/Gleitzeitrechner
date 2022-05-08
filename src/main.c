@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "eingabeUhrzeit.h"
+
 #define ARBEITSZEIT_STUNDEN 7   // reguläre Arbeitszeit, Stundenanteil
 #define ARBEITSZEIT_MINUTEN 48  // reguläre Arbeitszeit, Minutenanteil
 #define PAUSE_STUNDEN 0         // reguläre Pausenzeit, Stundenanteil
 #define PAUSE_MINUTEN 30        // reguläre Pausenzeit, Minutenanteil
-
-int eingabeUhrzeit(unsigned int*, unsigned int*);
-int testUhrzeit(unsigned int, unsigned int);
 
 int main() {
   // notwendige Variablen, bitte nicht verändern
@@ -58,35 +57,4 @@ int main() {
   getchar();
 
   return EXIT_SUCCESS;
-}
-
-int eingabeUhrzeit(unsigned int* stundenPointer, unsigned int* minutenPointer) {
-  unsigned int stundenEingabe = 0;
-  unsigned int minutenEingabe = 0;
-
-  printf("[HH:MM] ");
-  scanf("%2u:%2u", &stundenEingabe, &minutenEingabe);
-  while (getchar() != '\n')
-    ;
-
-  if (testUhrzeit(stundenEingabe, minutenEingabe) != 0) return 1;
-
-  *stundenPointer = stundenEingabe;
-  *minutenPointer = minutenEingabe;
-
-  return 0;
-}
-
-int testUhrzeit(unsigned int stundenValue, unsigned int minutenValue) {
-  if (stundenValue > 23 || minutenValue > 59) {
-    printf(
-        "\nDie Zeit %02d:%02d scheint nicht realistisch.\n"
-        "Versuchen Sie es noch einmal",
-        stundenValue, minutenValue);
-
-    return 1;
-
-  } else {
-    return 0;
-  }
 }
