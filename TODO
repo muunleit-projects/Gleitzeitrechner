@@ -1,8 +1,5 @@
-Funktionen in separate Dateien
-
 Datei lesen
 Datei schreiben
-
 
 Pause = gesetzliche Pause?
 If Arbeitszeit > 9 then pause 45
