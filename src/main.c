@@ -62,8 +62,8 @@ int main() {
    */
   arbeitsende = localtime(&jetzt);
 
-  /* It checks if the current hour is smaller than the starting hour. If it is,
-   * it subtracts one from the day. */
+  /* It checks if the current hour is smaller than the starting hour.
+   * If it is, it subtracts one from the day. */
   if (arbeitsende->tm_hour < (int)arbeitsbeginn_stunden) {
     arbeitsende->tm_mday -= 1;
   }
@@ -79,7 +79,8 @@ int main() {
    * when the work ends and clean Up Arbeitsende-Kontrukt in one functioncall */
   zeit_bis_arbeitsende = difftime(mktime(arbeitsende), jetzt) / 3600;
 
-  /* Printing the time when the work ends and the time left until the work ends. */
+  /* Printing the time when the work ends and the time left until the work ends.
+   */
   printf(
       "\nBei einer Arbeitszeit von %d:%02dh und %d:%02dh Pause "
       "waere gegen %02d:%02d Arbeitsende\n",
