@@ -17,13 +17,13 @@ int main() {
 
   /* Asking the user to input the starting time. */
   printf("Geben Sie die Anfangszeit ein ");
-  while (eingabeZeit(arbeitsbeginn) != 0) {
+  while (eingabeZeit(&arbeitsbeginn[0], &arbeitsbeginn[1]) != 0) {
     printf("Versuchen Sie es noch einmal ");
   }
 
   /* Asking the user to input the working time. */
   printf("Geben Sie die Laenge der Arbeitszeit ein ");
-  while (eingabeZeit(arbeitszeit) != 0) {
+  while (eingabeZeit(&arbeitszeit[0], &arbeitszeit[1]) != 0) {
     printf("Versuchen Sie es noch einmal ");
   }
 
@@ -48,7 +48,7 @@ int main() {
     }
   } else {
     printf("Geben Sie die Laenge der Pause ein ");
-    while (eingabeZeit(pause) != 0) {
+    while (eingabeZeit(&pause[0], &pause[1]) != 0) {
       printf("Versuchen Sie es noch einmal ");
     }
   }
