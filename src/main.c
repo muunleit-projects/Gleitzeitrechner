@@ -32,10 +32,8 @@ int main() {
   /* Asking the user if the length of the pause is according to the legal
    * requirements. */
   printf("Entspricht die Laenge ihrer Pause den gesetzlichen Vorgaben? ");
-  pause_gesetzlich = jaNeinAbfrage();
-  while (pause_gesetzlich < 0) {
+  while ((pause_gesetzlich = jaNeinAbfrage()) < 0) {
     printf("Versuchen Sie es noch einmal ");
-    pause_gesetzlich = jaNeinAbfrage();
   }
 
   /* Setting the Asking the length of the pause to the legal requirements or
