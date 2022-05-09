@@ -6,12 +6,10 @@
 #include "jaNeinAbfrage.h"
 
 int main() {
-  unsigned int arbeitsbeginn_stunden = 0;
-  unsigned int arbeitsbeginn_minuten = 0;
-  unsigned int arbeitszeit_stunden = 0;
-  unsigned int arbeitszeit_minuten = 0;
-  unsigned int pause_stunden = 0;
-  unsigned int pause_minuten = 0;
+  /* Declaring arrays with hours in field [0] and minutes in feld [1] */
+  unsigned int arbeitsbeginn[2] = {0};
+  unsigned int arbeitszeit[2] = {0};
+  unsigned int pause[2] = {0};
   int pause_gesetzlich = 0;
   time_t jetzt = 0;
   struct tm* arbeitsende = NULL;
@@ -19,13 +17,13 @@ int main() {
 
   /* Asking the user to input the starting time. */
   printf("Geben Sie die Anfangszeit ein ");
-  while (eingabeZeit(&arbeitsbeginn_stunden, &arbeitsbeginn_minuten) != 0) {
+  while (eingabeZeit(arbeitsbeginn) != 0) {
     printf("Versuchen Sie es noch einmal ");
   }
 
   /* Asking the user to input the working time. */
   printf("Geben Sie die Laenge der Arbeitszeit ein ");
-  while (eingabeZeit(&arbeitszeit_stunden, &arbeitszeit_minuten) != 0) {
+  while (eingabeZeit(arbeitszeit) != 0) {
     printf("Versuchen Sie es noch einmal ");
   }
 
@@ -36,21 +34,21 @@ int main() {
     printf("Versuchen Sie es noch einmal ");
   }
 
-  /* Setting the Asking the length of the pause to the legal requirements or
-   * asking the user to input the pause time. */
+  /* Setting the length of the pause to the legal requirements or asking the
+   * user to input the pause time. */
   if (pause_gesetzlich) {
-    if (arbeitszeit_stunden >= 9) {
-      pause_minuten = 45;
+    if (arbeitszeit[0] >= 9) {
+      pause[1] = 45;
 
-    } else if (arbeitszeit_stunden >= 6) {
-      pause_minuten = 30;
+    } else if (arbeitszeit[0] >= 6) {
+      pause[1] = 30;
 
     } else {
-      pause_minuten = 0;
+      pause[1] = 0;
     }
   } else {
     printf("Geben Sie die Laenge der Pause ein ");
-    while (eingabeZeit(&pause_stunden, &pause_minuten) != 0) {
+    while (eingabeZeit(pause) != 0) {
       printf("Versuchen Sie es noch einmal ");
     }
   }
@@ -58,22 +56,19 @@ int main() {
   /* Getting the current time and storing it in the variable `jetzt`. */
   time(&jetzt);
 
-  /* Converting the time_t value `jetzt` to a struct tm value in local format.
-   */
+  /* Converting the time_t value `jetzt` to a struct tm value in local format */
   arbeitsende = localtime(&jetzt);
 
   /* It checks if the current hour is smaller than the starting hour.
    * If it is, it subtracts one from the day. */
-  if (arbeitsende->tm_hour < (int)arbeitsbeginn_stunden) {
+  if (arbeitsende->tm_hour < (int)arbeitsbeginn[0]) {
     arbeitsende->tm_mday -= 1;
   }
 
   /* Adding the starting time, the working time and the pause time to the
    * current time. */
-  arbeitsende->tm_hour =
-      arbeitsbeginn_stunden + arbeitszeit_stunden + pause_stunden;
-  arbeitsende->tm_min =
-      arbeitsbeginn_minuten + arbeitszeit_minuten + pause_minuten;
+  arbeitsende->tm_hour = arbeitsbeginn[0] + arbeitszeit[0] + pause[0];
+  arbeitsende->tm_min = arbeitsbeginn[1] + arbeitszeit[1] + pause[1];
 
   /* It calculates the time difference between the current time and the time
    * when the work ends and clean Up Arbeitsende-Kontrukt in one functioncall */
@@ -84,8 +79,8 @@ int main() {
   printf(
       "\nBei einer Arbeitszeit von %d:%02dh und %d:%02dh Pause "
       "waere gegen %02d:%02d Arbeitsende\n",
-      arbeitszeit_stunden, arbeitszeit_minuten, pause_stunden, pause_minuten,
-      arbeitsende->tm_hour, arbeitsende->tm_min);
+      arbeitszeit[0], arbeitszeit[1], pause[0], pause[1], arbeitsende->tm_hour,
+      arbeitsende->tm_min);
 
   printf("\nNoch %d Stunden und %.0f Minuten ", (int)zeit_bis_arbeitsende,
          (zeit_bis_arbeitsende - (int)zeit_bis_arbeitsende) * 60);
