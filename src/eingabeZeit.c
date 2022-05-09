@@ -12,7 +12,7 @@
 
 #include "testZeit.h"
 
-int eingabeZeit(unsigned int* stundenPointer, unsigned int* minutenPointer) {
+int eingabeZeit(unsigned int zeit[]) {
   unsigned int stundenEingabe = 0;
   unsigned int minutenEingabe = 0;
 
@@ -25,8 +25,8 @@ int eingabeZeit(unsigned int* stundenPointer, unsigned int* minutenPointer) {
   /* Checking if the input is valid. */
   if (testZeit(stundenEingabe, minutenEingabe) != 0) return -1;
 
-  *stundenPointer = stundenEingabe;
-  *minutenPointer = minutenEingabe;
+  zeit[0] = stundenEingabe;
+  zeit[1] = minutenEingabe;
 
   return 0;
 }
