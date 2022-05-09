@@ -8,28 +8,29 @@
 
 #include <stdio.h>
 
-int jaNeinAbfrage(char* jnPointer) {
-  char jnVar = 0;
+int jaNeinAbfrage() {
+  char jaNein = 0;
+  int returnVal = -1;
 
   printf("[J/N] ");
 
-  scanf("%c", &jnVar);
+  scanf("%c", &jaNein);
   while (getchar() != '\n')
     ;
 
-  switch (jnVar) {
+  switch (jaNein) {
     case 74:
     case 106:
-      *jnPointer = 'j';
+      returnVal = 1;
       break;
     case 78:
     case 110:
-      *jnPointer = 'n';
+      returnVal = 0;
       break;
     default:
-      return 1;
+      returnVal = -1;
       break;
   }
 
-  return 0;
+  return returnVal;
 }

@@ -12,7 +12,7 @@ int main() {
   unsigned int arbeitszeit_minuten = 0;
   unsigned int pause_stunden = 0;
   unsigned int pause_minuten = 0;
-  char pause_gesetzlich = 0;
+  int pause_gesetzlich = -1;
   time_t jetzt = 0;
   struct tm* arbeitsende = NULL;
   float zeit_bis_arbeitsende = 0;
@@ -32,13 +32,15 @@ int main() {
   /* Asking the user if the length of the pause is according to the legal
    * requirements. */
   printf("Entspricht die Laenge ihrer Pause den gesetzlichen Vorgaben? ");
-  while (jaNeinAbfrage(&pause_gesetzlich) != 0) {
+  pause_gesetzlich = jaNeinAbfrage();
+  while (pause_gesetzlich < 0) {
     printf("Versuchen Sie es noch einmal ");
+    pause_gesetzlich = jaNeinAbfrage();
   }
 
   /* Setting the Asking the length of the pause to the legal requirements or
    * asking the user to input the pause time. */
-  if (pause_gesetzlich == 'j') {
+  if (pause_gesetzlich == 1) {
     if (arbeitszeit_stunden >= 9) {
       pause_minuten = 45;
 
@@ -48,7 +50,7 @@ int main() {
     } else {
       pause_minuten = 0;
     }
-  } else if (pause_gesetzlich == 'n') {
+  } else if (pause_gesetzlich == 0) {
     printf("Geben Sie die Laenge der Pause ein ");
     while (eingabeZeit(&pause_stunden, &pause_minuten) != 0) {
       printf("Versuchen Sie es noch einmal ");
