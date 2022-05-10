@@ -4,6 +4,7 @@
 
 #include "eingabeZeit.h"
 #include "jaNeinAbfrage.h"
+#include "leseDatei.h"
 #include "schreibeDatei.h"
 
 int main(void) {
