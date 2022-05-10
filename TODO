@@ -1,7 +1,8 @@
 If work started not today? Long shift
-
-Check read_savefile_failed
-
+Read File function 
 If getc ... < 0
+-> Test Zeit
 
-Check time from Savefile
+Write File function
+
+Check read_file_failed variable
