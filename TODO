@@ -3,3 +3,5 @@ If work started not today? Long shift
 Check read_savefile_failed
 
 If getc ... < 0
+
+Check time from Savefile
