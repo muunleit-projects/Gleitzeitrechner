@@ -54,4 +54,5 @@ dkms.conf
 # Folders
 .vscode/
 .output/
+#Files
 GleitzeitSpeicher
