@@ -4,13 +4,16 @@
 
 #include "eingabeZeit.h"
 #include "jaNeinAbfrage.h"
+#include "schreibeDatei.h"
 
-int main() {
+int main(void) {
   /* Declaring arrays with hours in field [0] and minutes in feld [1] */
   unsigned int arbeitsbeginn[2] = {0};
   unsigned int arbeitszeit[2] = {0};
   unsigned int pause[2] = {0};
   int pause_gesetzlich = 0;
+  FILE* speicher_datei;
+  char name_speicher_datei[] = "GleitzeitSpeicher";
   time_t jetzt = 0;
   struct tm* arbeitsende = NULL;
   float zeit_bis_arbeitsende = 0;
@@ -21,35 +24,78 @@ int main() {
     printf("Versuchen Sie es noch einmal ");
   }
 
-  /* Asking the user to input the working time. */
-  printf("Geben Sie die Laenge der Arbeitszeit ein ");
-  while (eingabeZeit(&arbeitszeit[0], &arbeitszeit[1]) != 0) {
-    printf("Versuchen Sie es noch einmal ");
-  }
+  /* Opening the save-file and reading the values of the arrays arbeitszeit and
+   * pause from it. */
+  speicher_datei = fopen(name_speicher_datei, "rb");
 
-  /* Asking the user if the length of the pause is according to the legal
-   * requirements. */
-  printf("Entspricht die Laenge ihrer Pause den gesetzlichen Vorgaben? ");
-  while ((pause_gesetzlich = jaNeinAbfrage()) < 0) {
-    printf("Versuchen Sie es noch einmal ");
-  }
+  if (speicher_datei) {
+    for (int i = 0; i <= 1; i++) {
+      /* Reading the values and checking the if all expected values are there */
+      if (((int)(arbeitszeit[i] = (int)getc(speicher_datei)) == EOF) |
+          ((int)(pause[i] = (int)getc(speicher_datei)) == EOF)) {
+        printf(">> Datei %s beschaedigt. Loeschen Sie die Datei",
+               name_speicher_datei);
 
-  /* Setting the length of the pause to the legal requirements or asking the
-   * user to input the pause time. */
-  if (pause_gesetzlich) {
-    if (arbeitszeit[0] >= 9) {
-      pause[1] = 45;
+        return EXIT_FAILURE;
+      }
+    }
 
-    } else if (arbeitszeit[0] >= 6) {
-      pause[1] = 30;
+    fclose(speicher_datei);
+
+  } else {
+    printf(">> Datei %s konnte nicht gelesen werden\n", name_speicher_datei);
+
+    /* Asking the user to input the working time. */
+    printf("Geben Sie die Laenge der Arbeitszeit ein ");
+    while (eingabeZeit(&arbeitszeit[0], &arbeitszeit[1]) != 0) {
+      printf("Versuchen Sie es noch einmal ");
+    }
+
+    /* Asking the user if the length of the pause is according to the legal
+     * requirements. */
+    printf("Entspricht die Laenge ihrer Pause den gesetzlichen Vorgaben? ");
+    while ((pause_gesetzlich = jaNeinAbfrage()) < 0) {
+      printf("Versuchen Sie es noch einmal ");
+    }
+
+    /* Setting the length of the pause to the legal requirements or asking the
+     * user to input the pause time. */
+    if (pause_gesetzlich) {
+      if (arbeitszeit[0] >= 9) {
+        pause[1] = 45;
+
+      } else if (arbeitszeit[0] >= 6) {
+        pause[1] = 30;
+
+      } else {
+        pause[1] = 0;
+      }
+    } else {
+      printf("Geben Sie die Laenge der Pause ein ");
+      while (eingabeZeit(&pause[0], &pause[1]) != 0) {
+        printf("Versuchen Sie es noch einmal ");
+      }
+    }
+
+    /* Opening the save-file and writing the values of the arrays arbeitszeit
+     * and pause into it. */
+    speicher_datei = fopen(name_speicher_datei, "w+b");
+
+    if (speicher_datei) {
+      if (schreibeDatei(speicher_datei, arbeitszeit, 2) < 0) {
+        printf(">> Arbeitszeit konnte nicht in Datei %s geschrieben werden\n",
+               name_speicher_datei);
+      }
+      if (schreibeDatei(speicher_datei, pause, 2) < 0) {
+        printf(">> Pause konnte nicht in Datei %s geschrieben werden\n",
+               name_speicher_datei);
+      }
+
+      fclose(speicher_datei);
 
     } else {
-      pause[1] = 0;
-    }
-  } else {
-    printf("Geben Sie die Laenge der Pause ein ");
-    while (eingabeZeit(&pause[0], &pause[1]) != 0) {
-      printf("Versuchen Sie es noch einmal ");
+      printf(">> Datei %s konnte nicht geschrieben werden\n",
+             name_speicher_datei);
     }
   }
 
