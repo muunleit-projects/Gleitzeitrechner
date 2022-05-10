@@ -4,7 +4,7 @@
 
 #include "eingabeZeit.h"
 #include "jaNeinAbfrage.h"
-#include "leseDatei.h"
+#include "leseTesteZeit.h"
 #include "schreibeDatei.h"
 
 int main(void) {
@@ -15,6 +15,7 @@ int main(void) {
   int pause_gesetzlich = 0;
   FILE* speicher_datei;
   char name_speicher_datei[] = "GleitzeitSpeicher";
+  int zeiten_lese_fehler = 0;
   time_t jetzt = 0;
   struct tm* arbeitsende = NULL;
   float zeit_bis_arbeitsende = 0;
@@ -30,21 +31,24 @@ int main(void) {
   speicher_datei = fopen(name_speicher_datei, "rb");
 
   if (speicher_datei) {
-    for (int i = 0; i <= 1; i++) {
-      /* Reading the values and checking the if all expected values are there */
-      if (((int)(arbeitszeit[i] = (int)getc(speicher_datei)) == EOF) |
-          ((int)(pause[i] = (int)getc(speicher_datei)) == EOF)) {
-        printf(">> Datei %s beschaedigt. Loeschen Sie die Datei",
-               name_speicher_datei);
-
-        return EXIT_FAILURE;
-      }
+    if ((leseTesteZeit(speicher_datei, arbeitszeit)) != 0) {
+      zeiten_lese_fehler++;
+    }
+    if ((leseTesteZeit(speicher_datei, pause)) != 0) {
+      zeiten_lese_fehler++;
     }
 
     fclose(speicher_datei);
 
   } else {
-    printf(">> Datei %s konnte nicht gelesen werden\n", name_speicher_datei);
+    // printf(">> Datei %s konnte nicht geoeffnet werden\n",
+    // name_speicher_datei);
+    zeiten_lese_fehler++;
+  }
+
+  if (zeiten_lese_fehler) {
+    printf(">> Datei %s konnte nicht korrekt gelesen werden\n",
+           name_speicher_datei);
 
     /* Asking the user to input the working time. */
     printf("Geben Sie die Laenge der Arbeitszeit ein ");

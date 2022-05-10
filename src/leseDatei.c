@@ -1,11 +1,17 @@
-#include<stdio.h>
+#include <stdio.h>
 
 int leseDatei(FILE* datei, unsigned int array[], int arrayLaenge) {
-  for (int i = 0; i <= arrayLaenge; i++) {
+  /* int versuch;
+  for (int i = 0; i < arrayLaenge; i++) {
+    versuch = array[i] = getc(datei);
+    if (versuch < 0) {
+      return -1;
+    }
+  } */
+  for (int i = 0; i < arrayLaenge; i++) {
     if ((array[i] = getc(datei)) < 0) {
       return -1;
     }
-    // TODO: testZeit
   }
   return 0;
 }
