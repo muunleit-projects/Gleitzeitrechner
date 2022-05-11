@@ -1,3 +1,9 @@
+/**
+ * It reads the starting time, the working time and the pause time from the user
+ * and calculates the time when the work ends and the difference between the
+ * current time and the time when the work ends.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -8,16 +14,25 @@
 #include "schreibeDatei.h"
 
 int main(void) {
-  /* Declaring arrays with hours in field [0] and minutes in feld [1] */
+  /* Array of hours and minutes when work started today */
   unsigned int arbeitsbeginn[2] = {0};
+  /* Array of hours and minutes of the daily work */
   unsigned int arbeitszeit[2] = {0};
+  /* Array of hours and minutes of the daily pause */
   unsigned int pause[2] = {0};
+  /* Variable to hold info if the pause is based on the legal requirements */
   int pause_gesetzlich = 0;
-  FILE* speicher_datei;
+  /* Handle for the savefile */
+  FILE* speicher_datei = NULL;
+  /* Name of the savefile */
   char name_speicher_datei[] = "GleitzeitSpeicher";
+  /* Variable that is used to check if an error occured */
   int fehler = 0;
+  /* The current time */
   time_t jetzt = 0;
+  /* The workingdays end */
   struct tm* arbeitsende = NULL;
+  /* The time until workingdays end */
   float zeit_bis_arbeitsende = 0;
 
   /*
@@ -38,10 +53,12 @@ int main(void) {
   if (speicher_datei) {
     fehler = 0;
 
+    /* get the working time */
     if ((leseTesteZeit(speicher_datei, arbeitszeit)) != 0) {
       fehler = 1;
     }
 
+    /* get the pause time */
     if ((leseTesteZeit(speicher_datei, pause)) != 0) {
       fehler = 1;
     }
@@ -52,12 +69,17 @@ int main(void) {
     fehler = 1;
   }
 
+  /*
+   * if reading the values of working time and the pause time from the savefile
+   * didn't work, asking the user to input the working time and the pause time.
+   */
   if (fehler) {
     printf(">> Datei %s konnte nicht korrekt gelesen werden\n",
            name_speicher_datei);
 
     /* Asking the user to input the working time. */
     printf("Geben Sie die Laenge der Arbeitszeit ein ");
+
     while (eingabeZeit(&arbeitszeit[0], &arbeitszeit[1]) != 0) {
       printf("Versuchen Sie es noch einmal ");
     }
@@ -65,12 +87,15 @@ int main(void) {
     /* Asking the user if the length of the pause is according to the legal
      * requirements. */
     printf("Entspricht die Laenge ihrer Pause den gesetzlichen Vorgaben? ");
+
     while ((pause_gesetzlich = jaNeinAbfrage()) < 0) {
       printf("Versuchen Sie es noch einmal ");
     }
 
-    /* Setting the length of the pause to the legal requirements or asking the
-     * user to input the pause time. */
+    /*
+     * Setting the length of the pause to the legal requirements or asking the
+     * user to input the pause time.
+     */
     if (pause_gesetzlich) {
       if (arbeitszeit[0] >= 9) {
         pause[1] = 45;
@@ -83,21 +108,28 @@ int main(void) {
       }
     } else {
       printf("Geben Sie die Laenge der Pause ein ");
+
       while (eingabeZeit(&pause[0], &pause[1]) != 0) {
         printf("Versuchen Sie es noch einmal ");
       }
     }
 
-    /* Opening the save-file and writing the values of the arrays arbeitszeit
-     * and pause into it. */
+    /*
+     * Opening the savefile and writing the values of the arrays arbeitszeit and
+     * pause into it.
+     */
     speicher_datei = fopen(name_speicher_datei, "w+b");
 
     if (speicher_datei) {
       fehler = 0;
-      if (schreibeDatei(speicher_datei, arbeitszeit, 2) < 0) {
+
+      /* write the working time */
+      if (schreibeDatei(speicher_datei, arbeitszeit, 2) != 0) {
         fehler = 1;
       }
-      if (schreibeDatei(speicher_datei, pause, 2) < 0) {
+
+      /* write the pause time */
+      if (schreibeDatei(speicher_datei, pause, 2) != 0) {
         fehler = 1;
       }
 
@@ -106,35 +138,47 @@ int main(void) {
     } else {
       fehler = 1;
     }
-    
+
+    /* It checks if the file could be written. */
     if (fehler) {
       printf(">> Datei %s konnte nicht geschrieben werden\n",
              name_speicher_datei);
     }
   }
 
-  /* Getting the current time and storing it in the variable `jetzt`. */
+  /*
+   * It gets the current time and stores it in the variable `jetzt`.
+   */
   time(&jetzt);
 
-  /* Converting the time_t value `jetzt` to a struct tm value in local format */
+  /*
+   * It converts the time_t value `jetzt` to a struct tm value in local format.
+   */
   arbeitsende = localtime(&jetzt);
 
-  /* It checks if the current hour is smaller than the starting hour.
-   * If it is, it subtracts one from the day. */
+  /*
+   * It checks if the current hour is smaller than the starting hour.
+   * If it is, it subtracts one from the day.
+   */
   if (arbeitsende->tm_hour < (int)arbeitsbeginn[0]) {
     arbeitsende->tm_mday -= 1;
   }
 
-  /* Adding the starting time, the working time and the pause time to the
-   * current time. */
+  /*
+   * Adding the starting time, the working time and the pause time to the
+   * current time.
+   */
   arbeitsende->tm_hour = arbeitsbeginn[0] + arbeitszeit[0] + pause[0];
   arbeitsende->tm_min = arbeitsbeginn[1] + arbeitszeit[1] + pause[1];
 
-  /* It calculates the time difference between the current time and the time
-   * when the work ends and clean Up Arbeitsende-Kontrukt in one functioncall */
+  /*
+   * It calculates the time difference between the current time and the time
+   * when  work ends and clean Up Arbeitsende-Kontrukt in one functioncall
+   */
   zeit_bis_arbeitsende = difftime(mktime(arbeitsende), jetzt) / 3600;
 
-  /* Printing the time when the work ends and the time left until the work ends.
+  /*
+   * Printing the time when the work ends and the time left until the work ends.
    */
   printf(
       "\nBei einer Arbeitszeit von %d:%02dh und %d:%02dh Pause "
@@ -145,7 +189,9 @@ int main(void) {
   printf("\nNoch %d Stunden und %.0f Minuten ", (int)zeit_bis_arbeitsende,
          (zeit_bis_arbeitsende - (int)zeit_bis_arbeitsende) * 60);
 
-  /* Waiting for the user to press a key. */
+  /*
+   * Waiting for the user to press a key.
+   */
   getchar();
 
   return EXIT_SUCCESS;
