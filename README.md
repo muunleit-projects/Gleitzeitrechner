@@ -1,3 +1,3 @@
 # Gleitzeitrechner
 Calculate the workingdays end.
-Doens't work on long shifts ( >= 24h )
+Doens't work good on long shifts over 24h
