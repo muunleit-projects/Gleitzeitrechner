@@ -15,38 +15,44 @@ int main(void) {
   int pause_gesetzlich = 0;
   FILE* speicher_datei;
   char name_speicher_datei[] = "GleitzeitSpeicher";
-  int zeiten_lese_fehler = 0;
+  int fehler = 0;
   time_t jetzt = 0;
   struct tm* arbeitsende = NULL;
   float zeit_bis_arbeitsende = 0;
 
-  /* Asking the user to input the starting time. */
+  /*
+   * Asking the user to input the starting time.
+   */
   printf("Geben Sie die Anfangszeit ein ");
+
   while (eingabeZeit(&arbeitsbeginn[0], &arbeitsbeginn[1]) != 0) {
     printf("Versuchen Sie es noch einmal ");
   }
 
-  /* Opening the save-file and reading the values of the arrays arbeitszeit and
-   * pause from it. */
+  /*
+   * Opening the save-file and reading the values of the arrays arbeitszeit and
+   * pause from it.
+   */
   speicher_datei = fopen(name_speicher_datei, "rb");
 
   if (speicher_datei) {
+    fehler = 0;
+
     if ((leseTesteZeit(speicher_datei, arbeitszeit)) != 0) {
-      zeiten_lese_fehler++;
+      fehler = 1;
     }
+
     if ((leseTesteZeit(speicher_datei, pause)) != 0) {
-      zeiten_lese_fehler++;
+      fehler = 1;
     }
 
     fclose(speicher_datei);
 
   } else {
-    // printf(">> Datei %s konnte nicht geoeffnet werden\n",
-    // name_speicher_datei);
-    zeiten_lese_fehler++;
+    fehler = 1;
   }
 
-  if (zeiten_lese_fehler) {
+  if (fehler) {
     printf(">> Datei %s konnte nicht korrekt gelesen werden\n",
            name_speicher_datei);
 
@@ -87,18 +93,21 @@ int main(void) {
     speicher_datei = fopen(name_speicher_datei, "w+b");
 
     if (speicher_datei) {
+      fehler = 0;
       if (schreibeDatei(speicher_datei, arbeitszeit, 2) < 0) {
-        printf(">> Arbeitszeit konnte nicht in Datei %s geschrieben werden\n",
-               name_speicher_datei);
+        fehler = 1;
       }
       if (schreibeDatei(speicher_datei, pause, 2) < 0) {
-        printf(">> Pause konnte nicht in Datei %s geschrieben werden\n",
-               name_speicher_datei);
+        fehler = 1;
       }
 
       fclose(speicher_datei);
 
     } else {
+      fehler = 1;
+    }
+    
+    if (fehler) {
       printf(">> Datei %s konnte nicht geschrieben werden\n",
              name_speicher_datei);
     }
