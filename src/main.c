@@ -64,7 +64,9 @@ int main(void) {
     }
 
     fclose(speicher_datei);
-
+    printf(">> Arbeitszeit %d:%02dh und %d:%02dh Pause aus Datei %s gelesen\n",
+           arbeitszeit[0], arbeitszeit[1], pause[0], pause[1],
+           name_speicher_datei);
   } else {
     fehler = 1;
   }
@@ -135,6 +137,12 @@ int main(void) {
 
       fclose(speicher_datei);
 
+      printf(
+          ">> Arbeitszeit %d:%02dh und %d:%02dh Pause in Datei %s "
+          "geschrieben\n",
+          arbeitszeit[0], arbeitszeit[1], pause[0], pause[1],
+          name_speicher_datei);
+
     } else {
       fehler = 1;
     }
@@ -180,11 +188,8 @@ int main(void) {
   /*
    * Printing the time when the work ends and the time left until the work ends.
    */
-  printf(
-      "\nBei einer Arbeitszeit von %d:%02dh und %d:%02dh Pause "
-      "waere gegen %02d:%02d Arbeitsende\n",
-      arbeitszeit[0], arbeitszeit[1], pause[0], pause[1], arbeitsende->tm_hour,
-      arbeitsende->tm_min);
+  printf("\nDas Ende des Arbeitstages waere gegen %02d:%02d \n",
+         arbeitsende->tm_hour, arbeitsende->tm_min);
 
   printf("\nNoch %d Stunden und %.0f Minuten ", (int)zeit_bis_arbeitsende,
          (zeit_bis_arbeitsende - (int)zeit_bis_arbeitsende) * 60);
