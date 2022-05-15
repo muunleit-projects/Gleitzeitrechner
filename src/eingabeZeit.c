@@ -19,8 +19,8 @@ int eingabeZeit(unsigned int* stundenPointer, unsigned int* minutenPointer) {
   printf("[HH:MM] ");
   scanf("%2u:%2u", &stundenEingabe, &minutenEingabe);
   /* Reading the newline character from the input buffer. */
-  while (getchar() != '\n')
-    ;
+  while (getchar() != '\n') {
+  }
 
   /* Checking if the input is valid. */
   if (testZeit(stundenEingabe, minutenEingabe) != 0) return -1;
