@@ -17,11 +17,11 @@ int leseTesteZeit(FILE* datei, unsigned int array[]) {
   unsigned int zeit[2] = {0};
 
   if ((leseDatei(datei, zeit, 2)) < 0) {
-    return -1;
+    return -1;  // return
   }
 
   if (testZeit(zeit[0], zeit[1]) < 0) {
-    return -1;
+    return -1;  // return
   }
 
   for (int i = 0; i < 2; i++) {
