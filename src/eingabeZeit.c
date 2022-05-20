@@ -23,7 +23,7 @@ int eingabeZeit(unsigned int* stundenPointer, unsigned int* minutenPointer) {
   }
 
   /* Checking if the input is valid. */
-  if (testZeit(stundenEingabe, minutenEingabe) != 0) return -1;
+  if (testZeit(stundenEingabe, minutenEingabe) != 0) return -1;  // return
 
   *stundenPointer = stundenEingabe;
   *minutenPointer = minutenEingabe;

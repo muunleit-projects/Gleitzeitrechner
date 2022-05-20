@@ -10,10 +10,5 @@
 
 int testZeit(unsigned int stundenValue, unsigned int minutenValue) {
   /* Checking if the input is valid. */
-  if (stundenValue > 23 || minutenValue > 59) {
-    return -1;
-
-  } else {
-    return 0;
-  }
+  return stundenValue > 23 || minutenValue > 59 ? -1 : 0;
 }
